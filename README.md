@@ -1,5 +1,8 @@
-Untuk Database silahkan dibuat menggunakan file sql yang ada\n
+## Database
 
-Admin Account \n
-Username : admin \n
-Password : admin
+Silakan impor file `.sql` yang sudah disediakan.
+
+### Admin Account
+
+**Username:** `admin`  
+**Password:** `admin`
