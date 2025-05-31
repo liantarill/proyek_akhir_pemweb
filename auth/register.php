@@ -39,13 +39,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         exit;
     }
 
-    // Simpan ke database
     $query = "INSERT INTO user (username, email, password, address, no_hp, foto_ktp)
               VALUES ('$username', '$email', '$password', '$address', '$no_hp', '$ktpName')";
 
+
+
     if (mysqli_query($conn, $query)) {
 
+        $user_id = mysqli_insert_id($conn);
         $_SESSION['username'] = $username;
+        $_SESSION['id'] = $user_id;
+        $_SESSION['role'] = 'user';
+        $_SESSION['login'] = true;
         header("Location: ../user/dashboard.php");
         exit;
     } else {

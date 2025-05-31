@@ -28,9 +28,11 @@ $result = mysqli_query($conn, "SELECT * FROM vehicle ORDER BY created_at DESC");
     <?php include '../components/navbar_admin.php'; ?>
 
     <div class="container mt-4">
-        <h2>Data Kendaraan</h2>
 
-        <a href="vehicle_add.php" class="btn btn-success mb-3">Tambah Kendaraan Baru</a>
+        <div class="d-flex justify-content-between mb-3">
+            <h2>Data Kendaraan</h2>
+            <a href="vehicle_add.php" class="btn btn-primary">Tambah Kendaraan Baru</a>
+        </div>
 
         <table class="table table-bordered table-striped align-middle">
             <thead class="table-dark">
@@ -67,7 +69,7 @@ $result = mysqli_query($conn, "SELECT * FROM vehicle ORDER BY created_at DESC");
                             <td><?= htmlspecialchars($row['status']) ?></td>
                             <td>
                                 <a href="vehicle_edit.php?id=<?= $row['id_vehicle'] ?>" class="btn btn-primary btn-sm">Edit</a>
-                                <a href="hapus_kendaraan.php?id=<?= $row['id_vehicle'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus kendaraan ini?')">Hapus</a>
+                                <a href="vehicle_delete.php?id=<?= $row['id_vehicle'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus kendaraan ini?')">Hapus</a>
                             </td>
                         </tr>
                     <?php endwhile; ?>
