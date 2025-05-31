@@ -1,0 +1,51 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
+    <!-- <div class=""> -->
+    <a class="navbar-brand" href="#">caRent</a>
+
+    <!-- Button toggle untuk tampilan mobile -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTenant" aria-controls="navbarTenant" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <!-- Daftar menu navbar -->
+    <div class="collapse navbar-collapse" id="navbarTenant">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="../user/dashboard.php">Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../user/vehicle.php">Kendaraan</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../user/history.php">Riwayat Sewa</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Pesanan Saya</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">Upload Bukti</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="../user/profile.php">Profil</a>
+            </li>
+        </ul>
+
+        <!-- Akun dan Logout -->
+        <div class="d-flex align-items-center">
+            <!-- Tautan ke Akun -->
+
+            <!-- Foto Profil -->
+            <?php if (!empty($user['profile_picture'])): ?>
+                <a href="profile.php">
+
+                    <img src="../assets/uploads/profile/<?= htmlspecialchars($user['profile_picture']) ?>" alt="Foto Profil"
+                        class="rounded-circle"
+                        style="width: 40px; height: 40px; object-fit: cover;" />
+                </a>
+            <?php endif; ?>
+
+
+        </div>
+
+    </div>
+</nav>
