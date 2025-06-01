@@ -1,0 +1,215 @@
+body {
+  background: #111827;
+  color: #e5e7eb;
+  font-family: "Inter", sans-serif;
+}
+
+.dashboard-container {
+  margin: 2rem auto;
+  padding: 2rem;
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+}
+
+.page-header {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+  border: none;
+  border-radius: 8px;
+  color: #111827;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
+}
+
+.vehicle-card {
+  background: rgba(31, 41, 55, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+}
+
+.vehicle-info h4 {
+  color: #d4af37;
+  font-weight: 700;
+}
+
+.vehicle-price {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #10b981;
+}
+
+.form-card {
+  background: rgba(17, 24, 39, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+  color: #e5e7eb;
+}
+
+.form-label {
+  color: #d4af37;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+}
+
+.form-control,
+.form-select {
+  background: rgba(31, 41, 55, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  color: #e5e7eb;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+  background: rgba(31, 41, 55, 0.95);
+  border-color: #d4af37;
+  box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+  color: #e5e7eb;
+}
+
+.btn-luxury {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+  border: none;
+  color: #111827;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-luxury:hover {
+  background: linear-gradient(135deg, #aa8c2c 0%, #d4af37 100%);
+  color: #111827;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}
+
+.btn-outline-luxury {
+  border: 2px solid rgba(212, 175, 55, 0.5);
+  color: #d4af37;
+  background: transparent;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.btn-outline-luxury:hover {
+  background: rgba(212, 175, 55, 0.1);
+  border-color: #d4af37;
+  color: #f3d77f;
+}
+
+.alert-luxury-danger {
+  background: linear-gradient(
+    135deg,
+    rgba(239, 68, 68, 0.9),
+    rgba(220, 38, 38, 0.9)
+  );
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  color: white;
+  border-radius: 8px;
+}
+
+.step-indicator {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.step {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  margin: 0 0.5rem;
+  font-weight: 600;
+  font-size: 0.875rem;
+}
+
+.step.active {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+  color: #111827;
+}
+
+.step.inactive {
+  background: rgba(31, 41, 55, 0.9);
+  color: #9ca3af;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.upload-area {
+  background: rgba(31, 41, 55, 0.5);
+  border: 2px dashed rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  padding: 2rem;
+  text-align: center;
+  margin-top: 1rem;
+  transition: all 0.3s ease;
+}
+
+.upload-area:hover {
+  border-color: #d4af37;
+  background: rgba(31, 41, 55, 0.7);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  color: rgba(212, 175, 55, 0.5);
+  margin-bottom: 1rem;
+}
+
+.price-calculation {
+  background: rgba(31, 41, 55, 0.9);
+  border: 1px solid rgba(212, 175, 55, 0.3);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-top: 1rem;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem 0;
+}
+
+.price-row.total {
+  border-top: 1px solid rgba(212, 175, 55, 0.3);
+  margin-top: 1rem;
+  padding-top: 1rem;
+  font-weight: 700;
+  font-size: 1.2rem;
+  color: #d4af37;
+}
+
+@media (max-width: 768px) {
+  .dashboard-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+  .step-indicator {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .step {
+    margin: 0.25rem 0;
+  }
+}

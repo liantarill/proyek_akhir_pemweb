@@ -180,99 +180,187 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Edit Profil</title>
+    <title>Edit Profil - Luxury Car Rental</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/edit_profile.css" />
 </head>
 
 <body style="overflow-y: scroll">
     <?php include '../components/navbar_user.php'; ?>
 
-    <div class="container mt-5">
+    <div class="container mt-4">
+        <!-- Page Header -->
+        <div class="page-header">
+            <div class="d-flex align-items-center">
+                <i class="fas fa-user-edit fa-2x me-3"></i>
+                <div>
+                    <h2 class="mb-1 fw-bold">Edit Profil</h2>
+                    <p class="mb-0 opacity-75">Perbarui informasi pribadi dan dokumen Anda</p>
+                </div>
+            </div>
+        </div>
+
         <div class="row justify-content-center">
-            <div class="col-md-8">
-
-                <div class="card shadow rounded-4">
-                    <div class="card-body">
-
-                        <h3 class="text-center mb-4">Edit Profil</h3>
-
-                        <!-- Tampilkan pesan error atau success jika ada -->
+            <div class="col-lg-8">
+                <div class="form-card">
+                    <div class="card-body p-4">
                         <?php if (!empty($error)): ?>
-                            <div class="alert alert-danger"><?= $error ?></div>
+                            <div class="alert alert-luxury-danger" role="alert">
+                                <i class="fas fa-exclamation-triangle me-2"></i>
+                                <?= $error ?>
+                            </div>
                         <?php elseif (!empty($success)): ?>
-                            <div class="alert alert-success"><?= $success ?></div>
+                            <div class="alert alert-luxury-success" role="alert">
+                                <i class="fas fa-check-circle me-2"></i>
+                                <?= $success ?>
+                            </div>
+                            <div class="d-flex justify-content-end mb-3">
+                                <a href="profile.php" class="btn btn-outline-luxury">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Kembali
+                                </a>
+                            </div>
+
                         <?php endif; ?>
 
                         <form action="edit_profile.php" method="POST" enctype="multipart/form-data">
-                            <!-- Username -->
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
-                                <input type="text" name="username" id="username" class="form-control"
-                                    value="<?= htmlspecialchars($user['username']) ?>" required />
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h5 class="text-warning mb-3">
+                                        <i class="fas fa-user me-2"></i>
+                                        Informasi Dasar
+                                    </h5>
+
+                                    <div class="mb-3">
+                                        <label for="username" class="form-label">
+                                            <i class="fas fa-user me-2"></i>Username
+                                        </label>
+                                        <input type="text" name="username" id="username" class="form-control"
+                                            value="<?= htmlspecialchars($user['username']) ?>"
+                                            placeholder="Masukkan username" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">
+                                            <i class="fas fa-envelope me-2"></i>Email
+                                        </label>
+                                        <input type="email" name="email" id="email" class="form-control"
+                                            value="<?= htmlspecialchars($user['email']) ?>"
+                                            placeholder="Masukkan email" />
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="no_hp" class="form-label">
+                                            <i class="fas fa-phone me-2"></i>No HP
+                                        </label>
+                                        <input type="text" name="no_hp" id="no_hp" class="form-control"
+                                            value="<?= htmlspecialchars($user['no_hp']) ?>"
+                                            placeholder="Masukkan nomor HP" />
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label for="address" class="form-label">
+                                            <i class="fas fa-map-marker-alt me-2"></i>Alamat
+                                        </label>
+                                        <textarea name="address" id="address" rows="3" class="form-control"
+                                            placeholder="Masukkan alamat lengkap"><?= htmlspecialchars($user['address']) ?></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <h5 class="text-warning mb-3">
+                                        <i class="fas fa-images me-2"></i>
+                                        Foto & Dokumen
+                                    </h5>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">
+                                            <i class="fas fa-camera me-2"></i>Foto Profil
+                                        </label>
+
+                                        <?php if (!empty($user['profile_picture'])): ?>
+                                            <div class="image-preview">
+                                                <p class="text-warning mb-2">
+                                                    <i class="fas fa-image me-2"></i>Foto Saat Ini
+                                                </p>
+                                                <img src="../assets/uploads/profile/<?= htmlspecialchars($user['profile_picture']) ?>"
+                                                    alt="Current Profile" class="current-image profile-preview mb-2" />
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="upload-area">
+                                                <i class="fas fa-user-circle upload-icon"></i>
+                                                <p class="text-muted mb-0">Belum ada foto profil</p>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <input type="file" name="profile_picture" class="form-control" accept="image/*" />
+                                        <div class="file-info">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Format JPG/PNG, maksimal 2MB (opsional)
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label">
+                                            <i class="fas fa-id-card me-2"></i>Foto KTP
+                                        </label>
+
+                                        <?php if (!empty($user['foto_ktp'])): ?>
+                                            <div class="image-preview">
+                                                <p class="text-warning mb-2">
+                                                    <i class="fas fa-id-card me-2"></i>KTP Saat Ini
+                                                </p>
+                                                <img src="../assets/uploads/ktp/<?= htmlspecialchars($user['foto_ktp']) ?>"
+                                                    alt="Current KTP" class="current-image ktp-preview mb-2" />
+                                            </div>
+                                        <?php else: ?>
+                                            <div class="upload-area">
+                                                <i class="fas fa-id-card upload-icon"></i>
+                                                <p class="text-muted mb-0">Belum ada foto KTP</p>
+                                            </div>
+                                        <?php endif; ?>
+
+                                        <input type="file" name="foto_ktp" class="form-control" accept="image/*" />
+                                        <div class="file-info">
+                                            <i class="fas fa-info-circle me-1"></i>
+                                            Format JPG/PNG, maksimal 2MB (opsional)
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
-                            <!-- Email -->
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Email</label>
-                                <input type="email" name="email" id="email" class="form-control"
-                                    value="<?= htmlspecialchars($user['email']) ?>" required />
-                            </div>
-
-                            <!-- No HP -->
-                            <div class="mb-3">
-                                <label for="no_hp" class="form-label">No HP</label>
-                                <input type="text" name="no_hp" id="no_hp" class="form-control"
-                                    value="<?= htmlspecialchars($user['no_hp']) ?>" />
-                            </div>
-
-                            <!-- Alamat -->
-                            <div class="mb-3">
-                                <label for="address" class="form-label">Alamat</label>
-                                <textarea name="address" id="address" rows="3" class="form-control"><?= htmlspecialchars($user['address']) ?></textarea>
-                            </div>
-
-                            <!-- Foto Profil (preview current dan input file) -->
-                            <div class="mb-3">
-                                <label class="form-label">Foto Profil Saat Ini</label><br />
-                                <?php if (!empty($user['profile_picture'])): ?>
-                                    <img src="../assets/uploads/profile/<?= htmlspecialchars($user['profile_picture']) ?>"
-                                        alt="Current Profile" class="img-thumbnail mb-2"
-                                        style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%;" />
-                                <?php else: ?>
-                                    <p class="text-muted">Belum ada foto profil.</p>
-                                <?php endif; ?>
-                                <input type="file" name="profile_picture" class="form-control" accept="image/*" />
-                                <small class="text-muted">Format JPG/PNG, max 2MB (opsional).</small>
-                            </div>
-
-                            <!-- Foto KTP (preview current dan input file) -->
-                            <div class="mb-4">
-                                <label class="form-label">Foto KTP Saat Ini</label><br />
-                                <?php if (!empty($user['foto_ktp'])): ?>
-                                    <img src="../assets/uploads/ktp/<?= htmlspecialchars($user['foto_ktp']) ?>"
-                                        alt="Current KTP" class="img-thumbnail mb-2"
-                                        style="max-height: 150px; object-fit: contain;" />
-                                <?php else: ?>
-                                    <p class="text-muted">Belum ada foto KTP.</p>
-                                <?php endif; ?>
-                                <input type="file" name="foto_ktp" class="form-control" accept="image/*" />
-                                <small class="text-muted">Format JPG/PNG, max 2MB (opsional).</small>
-                            </div>
-
-                            <!-- Tombol Simpan dan Batal -->
-                            <div class="d-flex justify-content-between">
-                                <a href="profile.php" class="btn btn-secondary">Batal</a>
-                                <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                            <div class="d-flex justify-content-between mt-4 pt-3" style="border-top: 1px solid rgba(212, 175, 55, 0.2);">
+                                <a href="profile.php" class="btn btn-outline-luxury">
+                                    <i class="fas fa-arrow-left me-2"></i>
+                                    Batal
+                                </a>
+                                <button type="submit" class="btn btn-luxury">
+                                    <i class="fas fa-save me-2"></i>
+                                    Simpan Perubahan
+                                </button>
                             </div>
                         </form>
-
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.querySelector('form').addEventListener('submit', function(e) {
+            const username = document.getElementById('username').value.trim();
+            const email = document.getElementById('email').value.trim();
+
+            if (!username || !email) {
+                e.preventDefault();
+                alert('Username dan Email harus diisi!');
+                return false;
+            }
+        });
+    </script>
 </body>
 
 </html>

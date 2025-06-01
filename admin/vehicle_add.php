@@ -18,6 +18,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $no_plat        = mysqli_real_escape_string($conn, $_POST['no_plat']);
     $harga_per_hari = floatval($_POST['harga_per_hari']);
     $deskripsi      = mysqli_real_escape_string($conn, $_POST['deskripsi']);
+    $transmisi      = mysqli_real_escape_string($conn, $_POST['transmisi']);
+    $bahan_bakar    = mysqli_real_escape_string($conn, $_POST['bahan_bakar']);
+    $kapasitas      = intval($_POST['kapasitas']);
     $status         = mysqli_real_escape_string($conn, $_POST['status']);
 
     // Validasi file upload
@@ -41,8 +44,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
             if (move_uploaded_file($tmpName, $destination)) {
                 // Simpan ke database
-                $query = "INSERT INTO vehicle (merk, tipe, tahun, no_plat, harga_per_hari, deskripsi, foto, status)
-                          VALUES ('$merk', '$tipe', '$tahun', '$no_plat', '$harga_per_hari', '$deskripsi', '$newName', '$status')";
+                $query = "INSERT INTO vehicle (merk, tipe, tahun, no_plat, harga_per_hari, deskripsi, transmisi, bahan_bakar, kapasitas, foto, status)
+                          VALUES ('$merk', '$tipe', '$tahun', '$no_plat', '$harga_per_hari', '$deskripsi', '$transmisi', '$bahan_bakar', '$kapasitas', '$newName', '$status')";
 
                 if (mysqli_query($conn, $query)) {
                     $success = "Data kendaraan berhasil ditambahkan.";
@@ -66,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     <meta charset="UTF-8">
     <title>Tambah Kendaraan</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="..assets/css/style.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
 </head>
 
 <body>
@@ -103,6 +106,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             <div class="mb-3">
                 <label for="deskripsi" class="form-label">Deskripsi</label>
                 <textarea name="deskripsi" class="form-control" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="transmisi" class="form-label">Transmisi</label>
+                <input type="text" name="transmisi" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="bahan_bakar" class="form-label">Bahan Bakar</label>
+                <input type="text" name="bahan_bakar" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="kapasitas" class="form-label">Kapasitas (penumpang)</label>
+                <input type="number" name="kapasitas" class="form-control" min="1" required>
             </div>
             <div class="mb-3">
                 <label for="foto" class="form-label">Foto Kendaraan</label>
