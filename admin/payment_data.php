@@ -55,7 +55,7 @@ $result = mysqli_query($conn, "
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <?php if ($r['rental_status'] === 'waiting_verification' && !empty($r['payment_proof'])): ?>
+                                <?php if ($r['rental_status'] === 'Menunggu Verifikasi' && !empty($r['payment_proof'])): ?>
                                     <a href="payment_verify.php?id=<?= $r['id_rental'] ?>&aksi=verifikasi" class="btn btn-success btn-sm" onclick="return confirm('Verifikasi pembayaran?')">Verifikasi</a>
                                     <a href="payment_verify.php?id=<?= $r['id_rental'] ?>&aksi=tolak" class="btn btn-danger btn-sm" onclick="return confirm('Tolak pembayaran?')">Tolak</a>
                                 <?php else: ?>

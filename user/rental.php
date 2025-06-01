@@ -52,7 +52,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $total_price = $diff * $vehicle['harga_per_hari'];
 
                 // Insert rental dengan status pending dan tanpa payment_proof
-                $stmt = $conn->prepare("INSERT INTO rental (id_user, id_vehicle, rental_date, return_date, total_price, rental_status) VALUES (?, ?, ?, ?, ?, 'pending')");
+                $stmt = $conn->prepare("INSERT INTO rental (id_user, id_vehicle, rental_date, return_date, total_price) VALUES (?, ?, ?, ?, ?)");
                 $stmt->bind_param("iissd", $id_user, $id_vehicle, $rental_date, $return_date, $total_price);
 
                 if ($stmt->execute()) {
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
                 if (move_uploaded_file($file_tmp, $destination)) {
                     // Update payment_proof dan status rental jadi waiting_verification
-                    $stmt = $conn->prepare("UPDATE rental SET payment_proof = ?, rental_status = 'waiting_verification' WHERE id_rental = ?");
+                    $stmt = $conn->prepare("UPDATE rental SET payment_proof = ? WHERE id_rental = ?");
                     $stmt->bind_param("si", $new_file_name, $id_rental);
                     if ($stmt->execute()) {
                         header("Location: dashboard.php?success=Upload bukti pembayaran berhasil, tunggu verifikasi admin.");
