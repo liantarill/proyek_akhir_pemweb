@@ -65,7 +65,7 @@ $result = mysqli_stmt_get_result($stmt);
                             <td><?= htmlspecialchars($r['rental_status']) ?></td>
                             <td>
                                 <?php if (!empty($r['payment_proof'])): ?>
-                                    <a href="../uploads/payment_proofs/<?= htmlspecialchars($r['payment_proof']) ?>" target="_blank">Lihat Bukti</a>
+                                    <a href="../assets/uploads/payment_proofs/<?= htmlspecialchars($r['payment_proof']) ?>" target="_blank">Lihat Bukti</a>
                                 <?php else: ?>
                                     <span class="text-muted">Belum upload</span>
                                 <?php endif; ?>
