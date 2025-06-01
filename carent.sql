@@ -25,6 +25,9 @@ CREATE TABLE vehicle (
     tipe VARCHAR(50) NOT NULL,
     tahun YEAR NOT NULL,
     no_plat VARCHAR(20) NOT NULL UNIQUE,
+    transmisi VARCHAR(20) NOT NULL,
+    bahan_bakar VARCHAR(20) NOT NULL,
+    kapasitas INT NOT NULL;
     harga_per_hari DECIMAL(10,2) NOT NULL,
     deskripsi TEXT,
     foto VARCHAR(255),
