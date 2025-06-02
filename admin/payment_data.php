@@ -14,7 +14,7 @@ $result = mysqli_query($conn, "
 <html>
 
 <head>
-    <title>Data Transaksi</title>
+    <title>caRent</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 

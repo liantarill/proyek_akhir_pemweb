@@ -4,26 +4,6 @@ body {
   font-family: "Inter", sans-serif;
 }
 
-.dashboard-container {
-  margin: 2rem auto;
-  padding: 2rem;
-  background: rgba(17, 24, 39, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  border-radius: 8px;
-  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-}
-
-.page-header {
-  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-  border: none;
-  border-radius: 8px;
-  color: #111827;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
-}
-
 .profile-card {
   background: rgba(17, 24, 39, 0.85);
   backdrop-filter: blur(10px);
@@ -174,11 +154,6 @@ body {
 }
 
 @media (max-width: 768px) {
-  .dashboard-container {
-    margin: 1rem;
-    padding: 1rem;
-  }
-
   .profile-avatar,
   .default-avatar {
     width: 120px;

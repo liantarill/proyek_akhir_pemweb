@@ -6,16 +6,6 @@ body {
   overflow-x: hidden;
 }
 
-.page-header {
-  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-  border: none;
-  border-radius: 8px;
-  color: #111827;
-  padding: 1.5rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
-}
-
 .dashboard-container {
   margin: 2rem auto;
   padding: 2rem;
@@ -28,35 +18,4 @@ body {
 
 h4 {
   font-weight: 700;
-}
-
-.alert-primary {
-  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-  border: none;
-
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.7);
-}
-
-.card {
-  border-radius: 8px;
-  border: 1px solid rgba(212, 175, 55, 0.3);
-  background: rgba(31, 41, 55, 0.9);
-  color: #e5e7eb;
-  box-shadow: 0 15px 25px rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 10px rgba(212, 175, 55, 0.1);
-}
-
-.card .card-title {
-  color: rgb(255, 255, 255);
-  font-weight: 600;
-}
-
-.card .fs-4 {
-  font-weight: 700;
-  color: rgb(255, 255, 255);
 }

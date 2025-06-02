@@ -22,125 +22,8 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/style.css">
-    <style>
-        body {
-            background: #111827;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            position: relative;
-            overflow-x: hidden;
-        }
+    <link rel="stylesheet" href="assets/css/index.css">
 
-
-
-        .login-card {
-            background: rgba(17, 24, 39, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 8px;
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-
-        .card-header {
-            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-            color: #111827;
-            text-align: center;
-            padding: 2rem 1.5rem;
-            border: none;
-            position: relative;
-        }
-
-        .card-body {
-            padding: 2.5rem;
-            color: #e5e7eb;
-        }
-
-        .form-floating {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-control {
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            border-radius: 4px;
-            padding: 1rem;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            background: rgba(255, 255, 255, 0.05);
-            color: #e5e7eb !important;
-        }
-
-        .form-control:focus {
-            border-color: #d4af37;
-            box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        .form-floating>label {
-            color: #9ca3af;
-            font-weight: 400;
-
-        }
-
-        .form-floating>.form-control:focus~label,
-        .form-floating>.form-control:not(:placeholder-shown)~label {
-            color: #d4af37;
-        }
-
-
-
-        .btn-login {
-            background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
-            border: none;
-            border-radius: 4px;
-            padding: 1rem;
-            font-weight: 600;
-            font-size: 1rem;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-            color: #111827;
-            ;
-        }
-
-
-
-        .register-link {
-            text-align: center;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid rgba(212, 175, 55, 0.2);
-        }
-
-        .register-link a {
-            color: #d4af37;
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
-
-        .register-link a:hover {
-            color: #f3d77f;
-            text-decoration: none;
-        }
-
-        .alert {
-            border-radius: 4px;
-            border: none;
-            margin-top: 1.5rem;
-            animation: slideIn 0.3s ease;
-        }
-
-        .alert-danger {
-            background: linear-gradient(135deg, #991b1b, #b91c1c);
-            color: white;
-            border-left: 4px solid #f87171;
-        }
-    </style>
 </head>
 
 <body>
@@ -180,7 +63,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                         </form>
 
                         <div class="register-link">
-                            <span class="text-light">First time client?</span>
+                            <span class="text-light">Belum memiliki akun?</span>
                             <a href="auth/register-page.php" class="ms-1">
                                 <i class="fas fa-user-plus me-1"></i>
                                 Register Now
@@ -190,7 +73,7 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
                         <?php if (isset($_GET['error'])): ?>
                             <div class="alert alert-danger">
                                 <i class="fas fa-exclamation-triangle me-2"></i>
-                                <strong>Access Denied!</strong> Invalid credentials provided.
+                                <strong>Access Ditolak!</strong> Username atau Password Salah.
                             </div>
                         <?php endif; ?>
                     </div>

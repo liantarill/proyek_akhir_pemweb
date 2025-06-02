@@ -1,35 +1,6 @@
 <?php
-session_start();
-include "../conn/db.php";
-
-if (!isset($_SESSION['username'])) {
-    header("Location: ../index.php");
-    exit;
-}
-
-$username = $_SESSION['username'];
-
-$query = mysqli_query($conn, "SELECT * FROM user WHERE username='$username'");
-$user = mysqli_fetch_assoc($query);
-
-if (!$user) {
-    session_destroy();
-    header("Location: ../index.php");
-    exit;
-}
-
-$user_id = $user['id_user'];
-
-$rental_query = mysqli_query($conn, "
-    SELECT 
-        COUNT(*) AS total,
-        COALESCE(SUM(rental_status = 'Terverifikasi'), 0) AS terverifikasi,
-        COALESCE(SUM(rental_status = 'Menunggu Verifikasi'), 0) AS menunggu,
-        COALESCE(SUM(rental_status = 'Ditolak'), 0) AS ditolak
-    FROM rental
-    WHERE id_user = $user_id
-");
-$rental_stats = mysqli_fetch_assoc($rental_query);
+include '../includes/auth_check.php';
+include '../controllers/dashboard_controller.php';
 ?>
 
 <!DOCTYPE html>
@@ -38,7 +9,7 @@ $rental_stats = mysqli_fetch_assoc($rental_query);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>User Dashboard</title>
+    <title>caRent</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css" />

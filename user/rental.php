@@ -1,66 +1,45 @@
 <?php
-session_start();
-include "../conn/db.php";
-
-if (!isset($_SESSION['username'])) {
-    header("Location: ../index.php");
-    exit;
-}
-$username = $_SESSION['username'];
-$queryUser = mysqli_query($conn, "SELECT * FROM user WHERE username='$username'");
-$user = mysqli_fetch_assoc($queryUser);
+include '../includes/auth_check.php';
 
 $id_vehicle = $_GET['id'] ?? null;
 if (!$id_vehicle || !is_numeric($id_vehicle)) {
     die("ID kendaraan tidak ditemukan atau tidak valid.");
 }
 
-// Ambil data kendaraan
-$stmt = $conn->prepare("SELECT * FROM vehicle WHERE id_vehicle = ?");
-$stmt->bind_param("i", $id_vehicle);
-$stmt->execute();
-$result = $stmt->get_result();
-$vehicle = $result->fetch_assoc();
-$stmt->close();
+$query = "SELECT * FROM vehicle WHERE id_vehicle = $id_vehicle";
+$result = mysqli_query($conn, $query);
+$vehicle = mysqli_fetch_assoc($result);
 
 if (!$vehicle) {
     die("Kendaraan tidak ditemukan.");
 }
 
 $error = '';
-$step = 'upload_bukti'; // CHANGED: Default to upload_bukti step for direct payment
+$step = 'upload_bukti';
 $id_rental = null;
 
-// Check if there's an existing rental for this user and vehicle that needs payment
 $id_user = $_SESSION['id'] ?? null;
 if ($id_user) {
-    $stmt = $conn->prepare("SELECT id_rental FROM rental WHERE id_user = ? AND id_vehicle = ? AND payment_proof IS NULL ORDER BY id_rental DESC LIMIT 1");
-    $stmt->bind_param("ii", $id_user, $id_vehicle);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    if ($existing_rental = $result->fetch_assoc()) {
+    $query = "SELECT id_rental FROM rental WHERE id_user = $id_user AND id_vehicle = $id_vehicle AND payment_proof IS NULL ORDER BY id_rental DESC LIMIT 1";
+    $result = mysqli_query($conn, $query);
+    if ($existing_rental = mysqli_fetch_assoc($result)) {
         $id_rental = $existing_rental['id_rental'];
     }
-    $stmt->close();
 }
 
-// If no existing rental, create a default one or redirect to form
 if (!$id_rental) {
-    // You can either create a default rental or redirect back to form
-    // For now, let's redirect to form if no pending rental exists
     $step = 'form_sewa';
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['rental_date'], $_POST['return_date'])) {
-        // Step 1: Proses form sewa
         $id_user = $_SESSION['id'] ?? null;
         if (!$id_user) {
             die("User tidak dikenali.");
         }
 
-        $rental_date = $_POST['rental_date'];
-        $return_date = $_POST['return_date'];
+        $rental_date = mysqli_real_escape_string($conn, $_POST['rental_date']);
+        $return_date = mysqli_real_escape_string($conn, $_POST['return_date']);
 
         $today = date('Y-m-d');
         if ($rental_date < $today) {
@@ -74,24 +53,21 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
             } else {
                 $total_price = $diff * $vehicle['harga_per_hari'];
 
-                // Insert rental dengan status pending dan tanpa payment_proof
-                $stmt = $conn->prepare("INSERT INTO rental (id_user, id_vehicle, rental_date, return_date, total_price) VALUES (?, ?, ?, ?, ?)");
-                $stmt->bind_param("iissd", $id_user, $id_vehicle, $rental_date, $return_date, $total_price);
+                $query = "INSERT INTO rental (id_user, id_vehicle, rental_date, return_date, total_price) 
+                          VALUES ($id_user, $id_vehicle, '$rental_date', '$return_date', $total_price)";
 
-                if ($stmt->execute()) {
-                    $id_rental = $stmt->insert_id;
+                if (mysqli_query($conn, $query)) {
+                    $id_rental = mysqli_insert_id($conn);
                     $step = 'upload_bukti';
                 } else {
-                    $error = "Gagal menyimpan transaksi: " . $conn->error;
+                    $error = "Gagal menyimpan transaksi: " . mysqli_error($conn);
                 }
-                $stmt->close();
             }
         }
     } elseif (isset($_POST['id_rental']) && isset($_FILES['payment_proof'])) {
-        // Step 2: Proses upload bukti pembayaran
-        $id_rental = $_POST['id_rental'];
+        $id_rental = (int)$_POST['id_rental'];
         $allowed_types = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
-        $max_size = 2 * 1024 * 1024; // max 2 MB
+        $max_size = 2 * 1024 * 1024;
 
         if ($_FILES['payment_proof']['error'] === UPLOAD_ERR_OK) {
             $file_tmp = $_FILES['payment_proof']['tmp_name'];
@@ -113,16 +89,14 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                 $destination = $upload_dir . $new_file_name;
 
                 if (move_uploaded_file($file_tmp, $destination)) {
-                    // Update payment_proof dan status rental jadi waiting_verification
-                    $stmt = $conn->prepare("UPDATE rental SET payment_proof = ? WHERE id_rental = ?");
-                    $stmt->bind_param("si", $new_file_name, $id_rental);
-                    if ($stmt->execute()) {
+                    $new_file_name = mysqli_real_escape_string($conn, $new_file_name);
+                    $query = "UPDATE rental SET payment_proof = '$new_file_name' WHERE id_rental = $id_rental";
+                    if (mysqli_query($conn, $query)) {
                         header("Location: dashboard.php?success=Upload bukti pembayaran berhasil, tunggu verifikasi admin.");
                         exit;
                     } else {
-                        $error = "Gagal update bukti pembayaran: " . $conn->error;
+                        $error = "Gagal update bukti pembayaran: " . mysqli_error($conn);
                     }
-                    $stmt->close();
                 } else {
                     $error = "Gagal mengupload file.";
                 }
@@ -135,14 +109,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="id">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Sewa Kendaraan - Luxury Car Rental</title>
+    <title>caRent</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/style.css">
@@ -289,7 +262,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
                             </form>
 
                         <?php else: ?>
-                            <!-- CHANGED: Direct to payment upload step -->
                             <h5 class="text-warning mb-4">
                                 <i class="fas fa-upload me-2"></i>
                                 Upload Bukti Pembayaran

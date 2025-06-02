@@ -1,30 +1,5 @@
 <?php
-session_start();
-include "../conn/db.php";
-
-// Pastikan user sudah login
-if (!isset($_SESSION['username'])) {
-    header("Location: ../index.php");
-    exit;
-}
-
-$id_user = $_SESSION['id'];
-
-$queryUser = mysqli_query($conn, "SELECT * FROM user WHERE id_user='$id_user'");
-$user = mysqli_fetch_assoc($queryUser);
-
-$query = "
-    SELECT rental.*, vehicle.merk, vehicle.tipe
-    FROM rental
-    JOIN vehicle ON rental.id_vehicle = vehicle.id_vehicle
-    WHERE rental.id_user = ?
-    ORDER BY rental.rental_date DESC
-";
-
-$stmt = mysqli_prepare($conn, $query);
-mysqli_stmt_bind_param($stmt, "i", $id_user);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
+include '../controllers/history_controller.php';
 ?>
 
 <!DOCTYPE html>
@@ -33,7 +8,7 @@ $result = mysqli_stmt_get_result($stmt);
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Riwayat Sewa - Luxury Car Rental</title>
+    <title>caRent</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">

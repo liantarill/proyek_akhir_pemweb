@@ -45,7 +45,6 @@ if (!move_uploaded_file($tmp, $path)) {
     exit;
 }
 
-// Update foto user di database
 mysqli_query($conn, "UPDATE user SET profile_picture='$namaBaru' WHERE username='$username'");
 
 header("Location: dashboard.php?success=Foto berhasil diupload");
