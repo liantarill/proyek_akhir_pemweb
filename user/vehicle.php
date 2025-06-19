@@ -137,7 +137,6 @@ include '../controllers/vehicle_controller.php' ?>
                 <h3 class="text-warning mb-3">Belum Ada Kendaraan Tersedia</h3>
                 <p class="mb-4">Maaf, saat ini belum ada kendaraan yang tersedia untuk disewa.</p>
                 <a href="dashboard.php" class="btn btn-luxury">
-                    <i class="fas fa-arrow-left me-2"></i>
                     Kembali ke Dashboard
                 </a>
             </div>

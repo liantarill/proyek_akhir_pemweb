@@ -27,7 +27,7 @@ CREATE TABLE vehicle (
     no_plat VARCHAR(20) NOT NULL UNIQUE,
     transmisi VARCHAR(20) NOT NULL,
     bahan_bakar VARCHAR(20) NOT NULL,
-    kapasitas INT NOT NULL;
+    kapasitas INT NOT NULL,
     harga_per_hari DECIMAL(10,2) NOT NULL,
     deskripsi TEXT,
     foto VARCHAR(255),
@@ -43,9 +43,7 @@ CREATE TABLE rental (
     return_date DATE NOT NULL,
     total_price DECIMAL(15,2) NOT NULL,
     rental_status ENUM('Menunggu Verifikasi', 'Terverifikasi', 'Ditolak') DEFAULT 'Menunggu Verifikasi',
-    payment_proof VARCHAR(255) DEFAULT NULL,
-    FOREIGN KEY (id_user) REFERENCES user(id_user),
-    FOREIGN KEY (id_vehicle) REFERENCES vehicle(id_vehicle)
+    payment_proof VARCHAR(255) DEFAULT NULL
 );
 
 INSERT INTO admin (username, password) VALUES ('admin', '$2y$12$tT7oApo21LEZTjB62pr/AecKrKOc6GymKGJ/GyONTMxo2NhioDLKy');

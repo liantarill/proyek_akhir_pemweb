@@ -1,3 +1,6 @@
+<?php
+$current_page = basename($_SERVER['PHP_SELF']);
+?>
 <nav class="navbar navbar-expand-lg navbar-dark px-3" style="background: #111827; border-bottom: 1px solid #d4af37;">
     <!-- Brand -->
     <a class="navbar-brand text-warning fw-bold" href="../user/dashboard.php">
@@ -14,25 +17,25 @@
         <!-- Navigation Links -->
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-                <a class="nav-link" href="../user/dashboard.php">
+                <a class="nav-link <?= ($current_page == 'dashboard.php') ? 'active' : '' ?>" href=" ../user/dashboard.php">
                     <i class="fas fa-tachometer-alt me-2"></i>
                     Dashboard
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../user/vehicle.php">
+                <a class="nav-link <?= ($current_page == 'vehicle.php' || $current_page == 'rental.php') ? 'active' : '' ?>" href="../user/vehicle.php">
                     <i class="fas fa-car me-2"></i>
                     Kendaraan
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../user/history.php">
+                <a class="nav-link <?= ($current_page == 'history.php') ? 'active' : '' ?> " href="../user/history.php">
                     <i class="fas fa-history me-2"></i>
                     Riwayat Sewa
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="../user/profile.php">
+                <a class="nav-link <?= ($current_page == 'profile.php' || $current_page == 'edit_profile.php') ? 'active' : '' ?>" href="../user/profile.php">
                     <i class="fas fa-user me-2"></i>
                     Profil
                 </a>

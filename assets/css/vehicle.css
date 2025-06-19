@@ -161,3 +161,22 @@ body {
   color: white;
   border-color: #ef4444;
 }
+
+.btn-luxury {
+  background: linear-gradient(135deg, #d4af37 0%, #aa8c2c 100%);
+  border: none;
+  color: #111827;
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.btn-luxury:hover {
+  background: linear-gradient(135deg, #aa8c2c 0%, #d4af37 100%);
+  color: #111827;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(212, 175, 55, 0.4);
+}

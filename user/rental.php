@@ -1,114 +1,97 @@
 <?php
 include '../includes/auth_check.php';
-
 $id_vehicle = $_GET['id'] ?? null;
+
 if (!$id_vehicle || !is_numeric($id_vehicle)) {
-    die("ID kendaraan tidak ditemukan atau tidak valid.");
+    die("ID kendaraan tidak valid.");
 }
 
-$query = "SELECT * FROM vehicle WHERE id_vehicle = $id_vehicle";
-$result = mysqli_query($conn, $query);
+// Ambil data kendaraan
+$result = mysqli_query($conn, "SELECT * FROM vehicle WHERE id_vehicle = $id_vehicle");
 $vehicle = mysqli_fetch_assoc($result);
-
-if (!$vehicle) {
-    die("Kendaraan tidak ditemukan.");
-}
+if (!$vehicle) die("Kendaraan tidak ditemukan.");
 
 $error = '';
 $step = 'upload_bukti';
 $id_rental = null;
-
 $id_user = $_SESSION['id'] ?? null;
+
 if ($id_user) {
-    $query = "SELECT id_rental FROM rental WHERE id_user = $id_user AND id_vehicle = $id_vehicle AND payment_proof IS NULL ORDER BY id_rental DESC LIMIT 1";
+    $query = "SELECT id_rental FROM rental 
+              WHERE id_user = $id_user AND id_vehicle = $id_vehicle 
+              AND payment_proof IS NULL 
+              ORDER BY id_rental DESC LIMIT 1";
     $result = mysqli_query($conn, $query);
-    if ($existing_rental = mysqli_fetch_assoc($result)) {
-        $id_rental = $existing_rental['id_rental'];
+    if ($row = mysqli_fetch_assoc($result)) {
+        $id_rental = $row['id_rental'];
     }
 }
 
-if (!$id_rental) {
-    $step = 'form_sewa';
-}
+if (!$id_rental) $step = 'form_sewa';
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
     if (isset($_POST['rental_date'], $_POST['return_date'])) {
-        $id_user = $_SESSION['id'] ?? null;
-        if (!$id_user) {
-            die("User tidak dikenali.");
-        }
-
-        $rental_date = mysqli_real_escape_string($conn, $_POST['rental_date']);
-        $return_date = mysqli_real_escape_string($conn, $_POST['return_date']);
+        $rental_date = $_POST['rental_date'];
+        $return_date = $_POST['return_date'];
 
         $today = date('Y-m-d');
         if ($rental_date < $today) {
-            $error = "Tanggal sewa tidak boleh sebelum hari ini.";
+            $error = "Tanggal sewa harus mulai hari ini atau setelahnya.";
         } elseif ($return_date <= $rental_date) {
             $error = "Tanggal kembali harus setelah tanggal sewa.";
         } else {
-            $diff = (strtotime($return_date) - strtotime($rental_date)) / (60 * 60 * 24);
-            if ($diff < 1) {
-                $error = "Durasi sewa minimal 1 hari.";
+            $hari = (strtotime($return_date) - strtotime($rental_date)) / 86400;
+            $total = $hari * $vehicle['harga_per_hari'];
+
+            $query = "INSERT INTO rental (id_user, id_vehicle, rental_date, return_date, total_price) 
+                      VALUES ($id_user, $id_vehicle, '$rental_date', '$return_date', $total)";
+            if (mysqli_query($conn, $query)) {
+                $id_rental = mysqli_insert_id($conn);
+                $step = 'upload_bukti';
             } else {
-                $total_price = $diff * $vehicle['harga_per_hari'];
-
-                $query = "INSERT INTO rental (id_user, id_vehicle, rental_date, return_date, total_price) 
-                          VALUES ($id_user, $id_vehicle, '$rental_date', '$return_date', $total_price)";
-
-                if (mysqli_query($conn, $query)) {
-                    $id_rental = mysqli_insert_id($conn);
-                    $step = 'upload_bukti';
-                } else {
-                    $error = "Gagal menyimpan transaksi: " . mysqli_error($conn);
-                }
+                $error = "Gagal menyimpan data rental.";
             }
         }
-    } elseif (isset($_POST['id_rental']) && isset($_FILES['payment_proof'])) {
+    } elseif (isset($_POST['id_rental'], $_FILES['payment_proof'])) {
+        $file = $_FILES['payment_proof'];
         $id_rental = (int)$_POST['id_rental'];
-        $allowed_types = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
-        $max_size = 2 * 1024 * 1024;
+        $allowed = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+        $max = 2 * 1024 * 1024;
 
-        if ($_FILES['payment_proof']['error'] === UPLOAD_ERR_OK) {
-            $file_tmp = $_FILES['payment_proof']['tmp_name'];
-            $file_name = basename($_FILES['payment_proof']['name']);
-            $file_type = mime_content_type($file_tmp);
-            $file_size = $_FILES['payment_proof']['size'];
-
-            if (!in_array($file_type, $allowed_types)) {
-                $error = "Format file tidak didukung. Gunakan JPG, PNG, atau PDF.";
-            } elseif ($file_size > $max_size) {
-                $error = "Ukuran file terlalu besar, maksimal 2 MB.";
+        if ($file['error'] === UPLOAD_ERR_OK) {
+            $type = mime_content_type($file['tmp_name']);
+            if (!in_array($type, $allowed)) {
+                $error = "Format tidak didukung.";
+            } elseif ($file['size'] > $max) {
+                $error = "Ukuran maksimal 2MB.";
             } else {
-                $upload_dir = "../assets/uploads/payment_proofs/";
-                if (!is_dir($upload_dir)) {
-                    mkdir($upload_dir, 0755, true);
-                }
-                $ext = pathinfo($_FILES['payment_proof']['name'], PATHINFO_EXTENSION);
-                $new_file_name = "payment_" . uniqid() . "." . $ext;
-                $destination = $upload_dir . $new_file_name;
+                $dir = "../assets/uploads/payment_proofs/";
+                if (!is_dir($dir)) mkdir($dir, 0755, true);
+                $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+                $new_name = "payment_" . uniqid() . "." . $ext;
+                $path = $dir . $new_name;
 
-                if (move_uploaded_file($file_tmp, $destination)) {
-                    $new_file_name = mysqli_real_escape_string($conn, $new_file_name);
-                    $query = "UPDATE rental SET payment_proof = '$new_file_name' WHERE id_rental = $id_rental";
+                if (move_uploaded_file($file['tmp_name'], $path)) {
+                    $query = "UPDATE rental SET payment_proof = '$new_name' WHERE id_rental = $id_rental";
                     if (mysqli_query($conn, $query)) {
-                        header("Location: dashboard.php?success=Upload bukti pembayaran berhasil, tunggu verifikasi admin.");
+                        header("Location: dashboard.php?success=Upload berhasil, tunggu verifikasi.");
                         exit;
                     } else {
-                        $error = "Gagal update bukti pembayaran: " . mysqli_error($conn);
+                        $error = "Gagal menyimpan bukti.";
                     }
                 } else {
-                    $error = "Gagal mengupload file.";
+                    $error = "Upload gagal.";
                 }
             }
         } else {
-            $error = "Terjadi kesalahan saat upload file.";
+            $error = "Terjadi error saat upload.";
         }
 
         $step = 'upload_bukti';
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="id">
 
